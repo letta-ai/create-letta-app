@@ -156,11 +156,21 @@ interface ExampleProps {
 export function Example(props: ExampleProps) {
     const {onComplete} = props;
 
+    const [isComplete, setIsComplete] = useState(false);
+
+    useInput(() => {
+        // keep to prevent UI from closing app, this is kind of hacking so it doesn't close
+    });
+
+    if (isComplete) {
+        return <Box><Text>Hi</Text></Box>
+    }
 
     return (
         <Box borderStyle="doubleSingle" display="flex" flexDirection="row">
             <ExampleView
                 onSelect={(example) => {
+                    setIsComplete(true);
                     onComplete(example);
                 }}
             />
@@ -169,14 +179,13 @@ export function Example(props: ExampleProps) {
 }
 
 export async function getSelectedExample() {
-    return new Promise((resolve) => {
+    return new Promise<SelectedAppPayload>((resolve) => {
         // clear the console
         process.stdout.write('\u001Bc')
 
         function onComplete(payload: SelectedAppPayload) {
-            process.stdout.write('\u001Bc')
             resolve(payload);
-        };
+        }
 
         render(<Example onComplete={onComplete}/>);
     });

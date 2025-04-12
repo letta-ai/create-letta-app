@@ -17,8 +17,7 @@ Generate a new Letta project (./src/commands/start.ts)
 
         const selectedApp = await getSelectedExample()
 
-
-        
+        console.log('Selected app:', selectedApp.framework);
         
         const useLettaCloud = await confirm({
             default: true,
@@ -45,8 +44,8 @@ Generate a new Letta project (./src/commands/start.ts)
             useLettaCloud,
         };
 
-        this.log('Configuration:', config);
+        // this.log('Configuration:', config);
 
-        process.exit(0);
+        this.exit(0);
     }
 }
