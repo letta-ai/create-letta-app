@@ -46,5 +46,7 @@ Generate a new Letta project (./src/commands/start.ts)
         };
 
         this.log('Configuration:', config);
+
+        process.exit(0);
     }
 }
