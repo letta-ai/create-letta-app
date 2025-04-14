@@ -66,7 +66,7 @@
   },
   "repository": "letta-ai/create-letta-app",
   "scripts": {
-    "dev": "npm run build && create-letta-app generate",
+    "dev": "ts-node bin/dev.js",
     "build": "shx rm -rf dist && tsc -b && cp -r ./example-apps ./dist",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",

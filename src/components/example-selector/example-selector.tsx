@@ -25,7 +25,7 @@ const supportedFrameworks: SupportedFramework[] = [
                 id: 'next-js-personal-agent',
                 label: "Personal agent chat",
                 postInstallCommands: ['npm install'],
-                preview: 'https://google.com',
+                preview: 'https://github.com/letta-ai/create-letta-app/tree/main/example-apps/next-js-personal-agent',
                 toolsUsed: ['next.js', 'ai-sdk', 'react', 'tailwind'],
             },
             // {
