@@ -3,6 +3,7 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
+    --border: #eee;
 }
 
 *,
@@ -10,8 +11,8 @@
 ::before,
 ::backdrop,
 ::file-selector-button {
-    border-color: #eee;
-    outline-color: #eee;
+    border-color: var(--border);
+    outline-color: var(--border);
 }
 
 @theme inline {
@@ -24,7 +25,8 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --background: #0a0a0a;
-        --foreground: #ededed;
+        --foreground: #ddd;
+        --border: #333;
     }
 }
 

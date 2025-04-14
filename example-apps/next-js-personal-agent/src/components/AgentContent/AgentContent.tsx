@@ -48,7 +48,7 @@ function AgentMessages(props: AgentMessagesProps) {
                 {messages.map(message => (
                     <div key={message.id} className="whitespace-pre-wrap w-full gap-2">
                         <div
-                            className={classNames('px-3 py-2 text-sm rounded-sm', message.role === 'user' ? 'justify-self-end bg-foreground text-background' : 'bg-gray-100 justify-self-start')}>
+                            className={classNames('px-3 py-2 text-sm rounded-sm', message.role === 'user' ? 'justify-self-end bg-foreground text-background' : 'bg-gray-100 dark:bg-gray-900 justify-self-start')}>
                             {message.parts.map((part, i) => {
                                 switch (part.type) {
                                     case 'text':
@@ -67,7 +67,7 @@ function AgentMessages(props: AgentMessagesProps) {
             <form className="flex items-center border rounded-md px-1.5 py-2 gap-2" onSubmit={handleSubmit}>
 
                 <input
-                    className="w-full h-[42px] w-full text-sm   px-3 py-2   bg-gray-50 rounded-sm "
+                    className="w-full h-[42px] w-full text-sm   px-3 py-2   bg-gray-50 dark:bg-gray-900 rounded-sm "
                     value={input}
                     disabled={status !== 'ready'}
                     placeholder="Say something..."
@@ -101,8 +101,8 @@ export function AgentContent(props: AgentContentProps) {
 
     if (!agent?.id) {
         return (
-            <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                <div className="bg-gray-200 max-w-[400px] rounded p-5 gap-2 flex flex-col">
+            <div className="w-full h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+                <div className="bg-gray-200 dark:bg-gray-800 max-w-[400px] rounded p-5 gap-2 flex flex-col">
                     <div className="w-25 flex">
                         <SleepingAgentIcon/>
                         <SleepingAgentIcon/>

@@ -1,14 +1,15 @@
 import {confirm, input, password} from '@inquirer/prompts'
 import {Command} from '@oclif/core'
+import {execSync} from "node:child_process";
 import * as fs from 'node:fs'
 import * as path from "node:path";
 import {fileURLToPath} from 'node:url';
-import {execSync} from "node:child_process";
 
 import {getSelectedExample} from "../components/example-selector/example-selector.js";
 
 
 export default class Generate extends Command {
+    static aliases = ['g']
     static args = {}
     static description = 'Generate a new Letta project'
     static examples = [
@@ -42,7 +43,9 @@ Generate a new Letta project (./src/commands/start.ts)
             message: `What is your API Key? [${shouldUseLettaCloud ? 'https://app.letta.com/api-keys' : 'optional'}]`,
         });
 
-        const workingDirectory = path.join(process.cwd(), 'tmp', selectedApp.id);
+        const isDev = process.env.NODE_ENV === 'create-letta-dev';
+
+        const workingDirectory = isDev ?   path.join(process.cwd(), 'tmp', selectedApp.id) :  path.join(process.cwd(), selectedApp.id);
 
         this.log(`Generating project in ${workingDirectory}...`);
 
@@ -72,8 +75,7 @@ LETTA_BASE_URL=${shouldUseLettaCloud ? 'https://app.letta.com' : serverUrl}
             execSync(command, {cwd: workingDirectory, stdio: 'inherit'});
         }
 
-
-        const successMessage = `Project generated successfully, you can visit ${workingDirectory} to start working on your project.\n\n Run 'npm run dev' to start the development server.`;
+        const successMessage = `Project generated successfully, you can visit ${workingDirectory} to start working on your project.\n\nRun the following commands to get started:\n\ncd ${selectedApp.id}\n\nnpm run dev!`;
 
         this.log(successMessage);
         this.exit(0);

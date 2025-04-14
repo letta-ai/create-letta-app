@@ -16,10 +16,10 @@ function AgentRow(props: AgentRowProps) {
 
     return (
         <li onClick={onSelect} key={agent.id}
-            className={classNames('flex items-center  h-[72px] rounded flex-row  gap-5 px-4 py-3 cursor-pointer hover:bg-gray-100', isSelected ? 'bg-gray-50' : '')}>
+            className={classNames('flex items-center  h-[72px] rounded flex-row  gap-5 px-4 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700', isSelected ? 'bg-gray-50 dark:bg-gray-800' : '')}>
             <div
-                className={classNames('p-2 h-6 w-6 flex items-center justify-center text-xs  rounded-sm', isSelected ? 'bg-blue-200' : 'bg-gray-100')}>
-                <Avatar className={isSelected ? 'bg-blue-200' : 'bg-gray-100'} name={agent.name} />
+                className={classNames('p-2 h-6 w-6 flex items-center justify-center text-xs  rounded-sm', isSelected ? 'bg-blue-200 dark:bg-blue-800' : 'bg-gray-100 dark:bg-gray-900')}>
+                <Avatar className={isSelected ? 'bg-blue-200 dark:bg-blue-800' : 'bg-gray-100 dark:bg-gray-900'} name={agent.name} />
             </div>
             <div className="hidden md:flex flex-col">
                 <div className="text-sm font-bold line-clamp-1">{agent.name}</div>
@@ -42,7 +42,7 @@ function AgentInnerList(props: AgentInnerListProps) {
     if (!agents) {
         return (
             new Array(10).fill(0).map((_, i) => (
-                <div className="w-[100%] min-h-[72px] h-4 bg-gray-50 animate-pulse" key={i}/>
+                <div className="w-[100%] min-h-[72px] h-4 bg-gray-50 dark:bg-gray-800 animate-pulse" key={i}/>
             ))
         )
     }
