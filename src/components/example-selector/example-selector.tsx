@@ -21,7 +21,7 @@ const supportedFrameworks: SupportedFramework[] = [
         demoApps: [
             {
                 description: "A simple Next.JS powered web app that allows you to chat to all the agents in your Letta server, there is no authentication.",
-                id: 'next-js-single-agent',
+                id: 'next-js-personal-agent',
                 label: "Personal agent chat",
                 preview: 'https://google.com',
                 toolsUsed: ['next.js', 'ai-sdk', 'react', 'tailwind', 'shadcn'],
