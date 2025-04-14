@@ -1,17 +1,18 @@
 import {Box, render, Text, useInput} from 'ink';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 
-import {NEXT_JS_LOGO} from "../logos/logos.js";
+import {LETTA_LOGO, LETTA_TEXT} from "../logos/logos.js";
 
 interface ExampleApp {
     description: string;
     id: string;
     label: string;
+    preview: string,
+    toolsUsed: string[];
 }
 
 interface SupportedFramework {
     demoApps: ExampleApp[];
-    icon: string;
     label: string;
 }
 
@@ -19,65 +20,101 @@ const supportedFrameworks: SupportedFramework[] = [
     {
         demoApps: [
             {
-                description: "A simple chat that uses next.js to talk to a single agent",
+                description: "A simple Next.JS powered web app that allows you to chat to all the agents in your Letta server, there is no authentication.",
                 id: 'next-js-single-agent',
-                label: "Single agent chat app"
+                label: "Personal agent chat",
+                preview: 'https://google.com',
+                toolsUsed: ['next.js', 'ai-sdk', 'react', 'tailwind', 'shadcn'],
             },
             {
-                description: "A chat app that multiple users sign up and talk to a specific type of agent",
+                description: "A Next.js powered web agent-chat app that supports multiple users. Using SQLLite as a external database and the identities api, this app allows users to sign up with a username and password and talk to their own agents",
                 id: 'next-js-multi-agent',
-                label: "Multi-user chat app"
+                label: "Multi-user agent chat",
+                preview: 'https://google.com',
+                toolsUsed: ['next.js',  'ai-sdk', 'sqlite', 'react', 'tailwind', 'shadcn'],
+            },
+            {
+                description: "A Next.js powered web agent-chat app that supports multiple users. Authentication is handled by Auth0 and the app uses MongoDB as a external database. This app allows users to sign up with social providers and talk to their own agents",
+                id: 'remote-db-next-js-multi-agent',
+                label: "OAuth multi-user chat",
+                preview: 'https://google.com',
+                toolsUsed: ['auth0',  'ai-sdk', 'next.js', 'mongodb', 'react', 'tailwind', 'shadcn'],
             },
         ],
-        icon: NEXT_JS_LOGO,
         label: 'Next.js'
     },
     {
         demoApps: [
             {
-                description: "A simple chat that uses next.js to talk to a single agent",
-                id: 'nuxt-js-single-agent',
-                label: "Single agent chat app"
+                description: "A simple Nuxt powered web app that allows you to chat to all the agents in your Letta server, there is no authentication.",
+                id: 'single-agent-chat',
+                label: "Personal agent chat",
+                preview: 'https://google.com',
+                toolsUsed: ['ai-sdk', 'nuxt', 'vuejs', 'tailwind'],
             }
         ],
-        icon: NEXT_JS_LOGO,
         label: 'Nuxt'
     },
     {
         demoApps: [
             {
-                description: "An AI chat app that allows users to sign up and talk to a selection of different fantasy agents",
+                description: "A React Native powered app that lets you talk to all the agents in your Letta server.",
                 id: 'expo-single-agent',
-                label: "Fantasy agent chat app"
+                label: "Agent mobile app",
+                preview: 'https://google.com',
+                toolsUsed: ['expo',  'ai-sdk', 'react-native', 'tailwind'],
             }
         ],
-        icon: NEXT_JS_LOGO,
         label: 'React Native'
+    },
+    {
+        demoApps: [
+            {
+                description: "A flask powered web app with a react frontend that allows you to chat to all the agents in your Letta server, there is no authentication.",
+                id: 'flask-react-single-agent',
+                label: "Personal agent chat",
+                preview: 'https://google.com',
+                toolsUsed: ['react', 'flask', 'tailwind'],
+            }
+        ],
+        label: 'Flask+React'
     }
 ]
 
 interface SelectedAppPayload extends ExampleApp {
     framework: string;
-    icon: string;
 }
 
 function SelectedExample(props: SelectedAppPayload) {
-    const {label, description} = props;
+    const {description, label} = props;
 
     return (
         <Box display="flex" flexDirection="column">
-            <Box alignItems="center" display="flex" flexDirection="row" gap={1}>
-
-                <Text color="blueBright">
+            <Box  display="flex" flexDirection="row" gap={1} paddingBottom={1}>
+                <Text bold color="blueBright">
                     {label}
+                </Text>
+            </Box>
+            <Box width={100}>
+                <Text>
+                    {description}
+                </Text>
+
+            </Box>
+            <Box paddingTop={1}>
+                <Text>
+                    <Text >Tools used:</Text>
+                    {props.toolsUsed.map((tool, index) => (
+                        <Text color="blueBright" key={index}>{` ${tool}`}</Text>
+                    ))}
                 </Text>
             </Box>
             <Box>
                 <Text>
-                    {description}
+                    <Text>Preview:</Text>
+                    <Text color="blueBright">{` ${props.preview}`}</Text>
                 </Text>
             </Box>
-
         </Box>
     )
 }
@@ -97,7 +134,6 @@ function ExampleView(props: ExampleViewProps) {
                 apps.push({
                     ...app,
                     framework: framework.label,
-                    icon: framework.icon
                 });
             }
         }
@@ -119,11 +155,10 @@ function ExampleView(props: ExampleViewProps) {
     const selectedApp = useMemo(() => exampleApps[selectedIndex], [selectedIndex, exampleApps]);
 
     return (
-        <Box display="flex" flexDirection="row">
-            <Box borderStyle="single" display="flex" flexDirection="column" flexGrow={1} gap={1} padding={1}>
-                <Box>
-                    <Text>Explore our demo apps</Text>
-                </Box>
+        <Box borderStyle="single" display="flex" flexDirection="row">
+
+            <Box borderBottom={false} borderLeft={false} borderStyle="single" borderTop={false} display="flex"
+                 flexDirection="column" gap={1} minWidth={30} paddingX={1} width={30}>
                 <Box display="flex" flexDirection="column">
                     {supportedFrameworks.map((framework, index) => (
                         <Box display="flex" flexDirection="column" key={index} marginBottom={1}>
@@ -139,8 +174,9 @@ function ExampleView(props: ExampleViewProps) {
                         </Box>
                     ))}
                 </Box>
+
             </Box>
-            <Box flexGrow={2} padding={2}>
+            <Box flexGrow={1} padding={2}>
                 <SelectedExample {...selectedApp}/>
             </Box>
 
@@ -156,21 +192,40 @@ interface ExampleProps {
 export function Example(props: ExampleProps) {
     const {onComplete} = props;
 
-    const [isComplete, setIsComplete] = useState(false);
+    const [selectedApp, setSelectedApp] = useState<null | SelectedAppPayload>(null);
 
     useInput(() => {
         // keep to prevent UI from closing app, this is kind of hacking so it doesn't close
     });
 
-    if (isComplete) {
-        return <Box><Text>Hi</Text></Box>
+    if (selectedApp) {
+        return (
+            <Box/>
+        )
     }
 
     return (
-        <Box borderStyle="doubleSingle" display="flex" flexDirection="row">
+        <Box borderStyle="doubleSingle" display="flex" flexDirection="column" padding={1}>
+            <Box alignItems="center" display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
+                <Box>
+                    <Text>{LETTA_LOGO}</Text>
+                </Box>
+                <Box>
+                    <Text>{LETTA_TEXT}</Text>
+                </Box>
+
+            </Box>
+            <Box borderStyle="single" display="flex" flexDirection="column" paddingX={1}>
+                <Text bold>npx create-letta-app generate</Text>
+                <Text>Pick below from the following example apps to be generated in your current directory: {process.cwd()}/[sample-app-name]</Text>
+                <Box borderBottom={false} borderLeft={false} borderRight={false} borderStyle="single" borderTop
+                     display="flex" flexDirection="column">
+                    <Text bold>Use arrow keys to navigate ↓ ↑</Text>
+                </Box>
+            </Box>
             <ExampleView
                 onSelect={(example) => {
-                    setIsComplete(true);
+                    setSelectedApp(example);
                     onComplete(example);
                 }}
             />

@@ -1,4 +1,4 @@
-import {confirm, input} from '@inquirer/prompts'
+import {confirm, input, password} from '@inquirer/prompts'
 import {Command} from '@oclif/core'
 
 import {getSelectedExample} from "../components/example-selector/example-selector.js";
@@ -17,32 +17,33 @@ Generate a new Letta project (./src/commands/start.ts)
 
         const selectedApp = await getSelectedExample()
 
-        console.log('Selected app:', selectedApp.framework);
-        
-        const useLettaCloud = await confirm({
+        this.log(`[Selected app: ${selectedApp.label}]`);
+
+        const shouldUseLettaCloud = await confirm({
             default: true,
             message: 'Do you want to use letta cloud?'
         });
 
         let serverUrl: string = 'localhost:8283'
-        if (!useLettaCloud) {
+        if (!shouldUseLettaCloud) {
             serverUrl = await input({
                 default: 'localhost:8283',
                 message: 'What is the name of the server you want to connect to?'
             });
         }
 
-        const apiKey = await input({
-            message: 'What is your API Key?',
+        const apiKey = await password({
+            mask: true,
+            message: `What is your API Key? [${shouldUseLettaCloud ? 'https://app.letta.com/api-keys' : 'optional'}]`,
         });
-        
 
-        const config = {
-            apiKey,
-            selectedApp,
-            serverUrl: useLettaCloud ? 'letta_cloud' : serverUrl,
-            useLettaCloud,
-        };
+        //
+        // const config = {
+        //     apiKey,
+        //     selectedApp,
+        //     serverUrl: shouldUseLettaCloud ? 'letta_cloud' : serverUrl,
+        //     useLettaCloud: shouldUseLettaCloud,
+        // };
 
         // this.log('Configuration:', config);
 
