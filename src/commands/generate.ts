@@ -1,7 +1,12 @@
 import {confirm, input, password} from '@inquirer/prompts'
 import {Command} from '@oclif/core'
+import * as fs from 'node:fs'
+import * as path from "node:path";
+import {fileURLToPath} from 'node:url';
+import {execSync} from "node:child_process";
 
 import {getSelectedExample} from "../components/example-selector/example-selector.js";
+
 
 export default class Generate extends Command {
     static args = {}
@@ -24,10 +29,10 @@ Generate a new Letta project (./src/commands/start.ts)
             message: 'Do you want to use letta cloud?'
         });
 
-        let serverUrl: string = 'localhost:8283'
+        let serverUrl: string = 'http://localhost:8283'
         if (!shouldUseLettaCloud) {
             serverUrl = await input({
-                default: 'localhost:8283',
+                default: 'http://localhost:8283',
                 message: 'What is the name of the server you want to connect to?'
             });
         }
@@ -37,16 +42,40 @@ Generate a new Letta project (./src/commands/start.ts)
             message: `What is your API Key? [${shouldUseLettaCloud ? 'https://app.letta.com/api-keys' : 'optional'}]`,
         });
 
-        //
-        // const config = {
-        //     apiKey,
-        //     selectedApp,
-        //     serverUrl: shouldUseLettaCloud ? 'letta_cloud' : serverUrl,
-        //     useLettaCloud: shouldUseLettaCloud,
-        // };
+        const workingDirectory = path.join(process.cwd(), 'tmp', selectedApp.id);
 
-        // this.log('Configuration:', config);
+        this.log(`Generating project in ${workingDirectory}...`);
 
+        const dirName = fileURLToPath(import.meta.url);
+
+        const templatePath = path.join(dirName, '..', '..', 'example-apps', selectedApp.id);
+
+        // copy the template files to the current working directory
+        fs.cpSync(templatePath, workingDirectory, {
+            recursive: true,
+        })
+
+        // create .env file in the current working directory
+        const envFilePath = path.join(workingDirectory, '.env');
+
+        const envContent = `
+LETTA_API_KEY=${apiKey}
+LETTA_BASE_URL=${shouldUseLettaCloud ? 'https://app.letta.com' : serverUrl}
+`;
+
+        fs.writeFileSync(envFilePath, envContent);
+
+        const postInstallCommands = selectedApp.postInstallCommands || [];
+
+        for (const command of postInstallCommands) {
+            this.log(`Running post setup command: ${command}`);
+            execSync(command, {cwd: workingDirectory, stdio: 'inherit'});
+        }
+
+
+        const successMessage = `Project generated successfully, you can visit ${workingDirectory} to start working on your project.\n\n Run 'npm run dev' to start the development server.`;
+
+        this.log(successMessage);
         this.exit(0);
     }
 }

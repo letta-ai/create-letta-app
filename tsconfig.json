@@ -9,6 +9,7 @@
     "jsx": "react",
     "moduleResolution": "node16"
   },
+  "exclude": ["./src/example-apps/**/*"],
   "include": ["./src/**/*"],
   "ts-node": {
     "esm": true
