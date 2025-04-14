@@ -1,4 +1,4 @@
-name: Release @letta-ai/letta-react
+name: Release create-letta-app
 on:
   push:
     branches: [main]
@@ -15,7 +15,6 @@ jobs:
         uses: actions/setup-node@v3
 
       - name: Compile
-        working-directory: ./packages/letta-react
         run: npm ci && npm run build
 
   test:
