@@ -1,11 +1,12 @@
-import {AgentState, ListMessages200, useListAgents, useListMessages} from "@letta-ai/letta-react";
 import {useEffect, useMemo, useRef} from "react";
 import {useChat} from "@ai-sdk/react";
 import {convertToAiSdkMessage} from "@letta-ai/vercel-ai-sdk-provider";
-import {LettaMessageUnion} from "@letta-ai/letta-client/api";
+import {AgentState, LettaMessageUnion} from "@letta-ai/letta-client/api";
 import {SleepingAgentIcon} from "@/components/icons/SleepingAgentIcon";
 import * as humps from 'humps'
 import classNames from "classnames";
+import {useLetta, useLettaQuery} from "@letta-ai/letta-react";
+import {useLettaAgentsList} from "@/hooks/useLettaAgentsList/useLettaAgentsList";
 
 interface AgentMessagesProps {
     initialMessages: LettaMessageUnion[]
@@ -90,12 +91,13 @@ interface AgentContentProps {
 export function AgentContent(props: AgentContentProps) {
     const {agent} = props;
 
-    const { isLoading } = useListAgents()
+    const {isLoading} = useLettaAgentsList();
 
-    const {data: initialMessages} = useListMessages(agent?.id || '', {limit: 100,}, {
-        query: {
-            enabled: !!agent?.id,
-        }
+    const {data: initialMessages} = useLettaQuery((client) => client.agents.messages.list(agent?.id || '', {
+        limit: 1000,
+    }), {
+        queryKey: ['messages', agent?.id],
+        enabled: !!agent?.id,
     });
 
 
@@ -130,7 +132,7 @@ export function AgentContent(props: AgentContentProps) {
             </header>
             {!!initialMessages &&
                 <AgentMessages
-                    initialMessages={humps.camelizeKeys<ListMessages200>(initialMessages.data) as LettaMessageUnion[]}
+                    initialMessages={initialMessages}
                     agentId={agent.id}/>}
         </div>
     )

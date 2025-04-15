@@ -2,7 +2,7 @@
 import {AgentsList} from "@/components/AgentsList/AgentsList";
 import {useState} from "react";
 import {AgentContent} from "@/components/AgentContent/AgentContent";
-import {AgentState} from "@letta-ai/letta-react";
+import { AgentState } from "@letta-ai/letta-client/api";
 
 export default function Homepage() {
     const [selectedAgent, setSelectedAgent] = useState<AgentState | null>(null);

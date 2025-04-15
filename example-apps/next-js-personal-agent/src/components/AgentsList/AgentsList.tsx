@@ -1,9 +1,10 @@
 'use client'
-import {AgentState, useListAgents} from "@letta-ai/letta-react";
+import {AgentState} from "@letta-ai/letta-client/api";
 import classNames from "classnames";
 import {useEffect} from "react";
 import {LettaAgentIcon} from "@/components/icons/LettaAgentIcon";
 import {Avatar} from "@/components/Avatar/Avatar";
+import {useLettaAgentsList} from "@/hooks/useLettaAgentsList/useLettaAgentsList";
 
 interface AgentRowProps {
     agent: AgentState
@@ -19,7 +20,8 @@ function AgentRow(props: AgentRowProps) {
             className={classNames('flex items-center  h-[72px] rounded flex-row  gap-5 px-4 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700', isSelected ? 'bg-gray-50 dark:bg-gray-800' : '')}>
             <div
                 className={classNames('p-2 h-6 w-6 flex items-center justify-center text-xs  rounded-sm', isSelected ? 'bg-blue-200 dark:bg-blue-800' : 'bg-gray-100 dark:bg-gray-900')}>
-                <Avatar className={isSelected ? 'bg-blue-200 dark:bg-blue-800' : 'bg-gray-100 dark:bg-gray-900'} name={agent.name} />
+                <Avatar className={isSelected ? 'bg-blue-200 dark:bg-blue-800' : 'bg-gray-100 dark:bg-gray-900'}
+                        name={agent.name}/>
             </div>
             <div className="hidden md:flex flex-col">
                 <div className="text-sm font-bold line-clamp-1">{agent.name}</div>
@@ -64,18 +66,21 @@ interface AgentsListProps {
 
 
 export function AgentsList(props: AgentsListProps) {
-    const {data} = useListAgents();
+    const {data} = useLettaAgentsList();
+
+
     const {onSelectAgent, selectedAgent} = props;
 
     useEffect(() => {
-        if (data?.data.length) {
-            onSelectAgent(data.data[0])
+        if (data?.length) {
+            onSelectAgent(data[0])
         }
-    }, [data?.data, onSelectAgent]);
+    }, [data, onSelectAgent]);
 
     return (
         <div className="flex flex-col border-r h-full  md:w-[300px] max-w-[300px] overflow-hidden">
-            <div className="h-[64px] min-h-[64px] flex items-center justify-center md:justify-start border-b items-center gap-3 p-5">
+            <div
+                className="h-[64px] min-h-[64px] flex items-center justify-center md:justify-start border-b items-center gap-3 p-5">
                 <div className="w-5 flex items-center justify-center">
                     <LettaAgentIcon/>
                 </div>
@@ -86,7 +91,7 @@ export function AgentsList(props: AgentsListProps) {
 
             <ul className={classNames('gap-2 p-2 flex flex-col w-full', !data ? 'overflow-hidden' : 'overflow-y-auto')}>
                 <AgentInnerList
-                    agents={data?.data}
+                    agents={data}
                     onSelect={onSelectAgent}
                     selectedAgent={selectedAgent}
                 />

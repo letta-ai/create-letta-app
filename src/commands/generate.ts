@@ -75,7 +75,7 @@ LETTA_BASE_URL=${shouldUseLettaCloud ? 'https://app.letta.com' : serverUrl}
             execSync(command, {cwd: workingDirectory, stdio: 'inherit'});
         }
 
-        const successMessage = `Project generated successfully, you can visit ${workingDirectory} to start working on your project.\n\nRun the following commands to get started:\n\ncd ${selectedApp.id}\n\nnpm run dev!`;
+        const successMessage = `Project generated successfully, you can visit ${workingDirectory} to start working on your project.\n\n=============================\nRun the following commands to get started:\ncd ${selectedApp.id}\nnpm run dev`;
 
         this.log(successMessage);
         this.exit(0);
