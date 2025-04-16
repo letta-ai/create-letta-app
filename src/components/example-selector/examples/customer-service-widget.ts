@@ -24,6 +24,7 @@ export const CUSTOMER_SERVICE_WIDGET: ExampleApp = {
 
             env.LETTA_TEMPLATE_NAME = templateName;
             env.LETTA_PROJECT_SLUG = config.projectSlug || '';
+            env.LETTA_PROJECT_ID = config.projectId;
         }
 
         return {

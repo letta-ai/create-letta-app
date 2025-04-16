@@ -1,16 +1,20 @@
 import {NextRequest, NextResponse} from "next/server";
 import {lettaServerClient} from "@/lettaServerClient";
-import {LETTA_PROJECT_SLUG, LETTA_TEMPLATE_NAME} from "@/environment";
+import {LETTA_PROJECT_ID, LETTA_PROJECT_SLUG, LETTA_TEMPLATE_NAME} from "@/environment";
 import {Identity} from "@letta-ai/letta-client/api";
 import * as fs from "fs";
 import path from "node:path";
+
+
+const isCloudWorkflow = !!(LETTA_TEMPLATE_NAME && LETTA_PROJECT_SLUG && LETTA_PROJECT_ID);
 
 export async function POST(req: NextRequest) {
     const {email, name} = await req.json();
 
     // first look up the user by email in identities
     const [foundIdentity] = await lettaServerClient.client.identities.list({
-        identifierKey: email
+        identifierKey: email,
+        ...isCloudWorkflow ? { projectId: LETTA_PROJECT_ID } : {},
     });
 
     let identity: Identity | null = foundIdentity;
@@ -28,6 +32,7 @@ export async function POST(req: NextRequest) {
             identifierKey: email,
             identityType: 'user',
             name,
+            ...isCloudWorkflow ? { projectId: LETTA_PROJECT_ID } : {},
         });
     }
 
@@ -41,7 +46,7 @@ export async function POST(req: NextRequest) {
     }
 
     // no cloud workflow
-    if (!LETTA_TEMPLATE_NAME || !LETTA_PROJECT_SLUG) {
+    if (!isCloudWorkflow) {
         const agentFile = await new Promise<string>((resolve, reject) => fs.readFile(path.join(process.cwd(), 'default-customer-support.af'), 'utf-8', (err, data) => {
             if (err) {
                 console.error(err);

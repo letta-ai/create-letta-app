@@ -1,7 +1,7 @@
 {
   "name": "create-letta-app",
   "description": "A new CLI generated with oclif",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Letta + Shelley Pham",
   "bin": {
     "create-letta-app": "./bin/run.js"
@@ -67,7 +67,7 @@
   },
   "repository": "letta-ai/create-letta-app",
   "scripts": {
-    "dev": "NODE_ENV=create-letta-dev shx rm -rf dist && tsc && create-letta-app",
+    "dev": "shx rm -rf dist && tsc && cp -r ./example-apps ./dist && NODE_ENV=create-letta-dev create-letta-app",
     "build": "shx rm -rf dist && tsc -b && cp -r ./example-apps ./dist",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",

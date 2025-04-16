@@ -7,3 +7,4 @@ export const LETTA_BASE_URL: string = process.env.LETTA_BASE_URL;
 export const LETTA_API_KEY = process.env.LETTA_API_KEY;
 export const LETTA_TEMPLATE_NAME = process.env.LETTA_TEMPLATE_NAME;
 export const LETTA_PROJECT_SLUG = process.env.LETTA_PROJECT_SLUG;
+export const LETTA_PROJECT_ID = process.env.LETTA_PROJECT_ID;

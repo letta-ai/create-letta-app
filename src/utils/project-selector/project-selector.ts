@@ -10,7 +10,10 @@ interface Response {
 
 export  async function projectSelector(apiKey: string): Promise<Response> {
     const client = getLettaClient(apiKey);
-    const debouncedListProjects = debounceAsyncFn((args) => client.projects.listprojects(args as any), 500);
+    const debouncedListProjects = debounceAsyncFn((args: { name?: string }) => client.projects.listprojects({
+        ...args,
+        limit: 5,
+    }), 500);
 
     const response = await autocomplete({
         message: 'Please select a project',

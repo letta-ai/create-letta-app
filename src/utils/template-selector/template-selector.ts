@@ -10,6 +10,7 @@ export async function templateSelector(projectId: string, apiKey: string): Promi
         {
             name: typeof args.name === 'string' ? args.name : undefined,
             projectId,
+            limit: 5,
         }
     ), 500);
 
