@@ -1,7 +1,7 @@
 {
   "name": "create-letta-app",
   "description": "A new CLI generated with oclif",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Letta + Shelley Pham",
   "bin": {
     "create-letta-app": "./bin/run.js"
@@ -9,11 +9,13 @@
   "bugs": "https://github.com/letta-ai/create-letta-app/issues",
   "dependencies": {
     "@inquirer/prompts": "^7.4.1",
+    "@letta-ai/letta-client": "^0.1.93",
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
     "@oclif/plugin-plugins": "^5",
     "ink": "^5.2.0",
     "inquirer": "^12.5.2",
+    "inquirer-autocomplete-standalone": "^0.8.1",
     "react": "^18.3.1"
   },
   "devDependencies": {
@@ -65,7 +67,7 @@
   },
   "repository": "letta-ai/create-letta-app",
   "scripts": {
-    "dev": "NODE_ENV=create-letta-dev ts-node bin/dev.js",
+    "dev": "NODE_ENV=create-letta-dev shx rm -rf dist && tsc && create-letta-app",
     "build": "shx rm -rf dist && tsc -b && cp -r ./example-apps ./dist",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",

@@ -1,12 +1,10 @@
 import {useEffect, useMemo, useRef} from "react";
 import {useChat} from "@ai-sdk/react";
 import {convertToAiSdkMessage} from "@letta-ai/vercel-ai-sdk-provider";
-import {AgentState, LettaMessageUnion} from "@letta-ai/letta-client/api";
-import {SleepingAgentIcon} from "@/components/icons/SleepingAgentIcon";
-import * as humps from 'humps'
+import {LettaMessageUnion} from "@letta-ai/letta-client/api";
 import classNames from "classnames";
-import {useLetta, useLettaQuery} from "@letta-ai/letta-react";
-import {useLettaAgentsList} from "@/hooks/useLettaAgentsList/useLettaAgentsList";
+import {useLettaQuery} from "@letta-ai/letta-react";
+import {LettaAgentIcon} from "@/components/icons/LettaAgentIcon";
 
 interface AgentMessagesProps {
     initialMessages: LettaMessageUnion[]
@@ -61,8 +59,12 @@ function AgentMessages(props: AgentMessagesProps) {
                 ))}
             </div>
             {isLoading && (
-                <div className="flex items-center justify-center w-full ">
-                    Streaming...
+                <div
+                    className="rounded-sm animate-pulse bg-gray-50 dark:bg-gray-800 p-2 text-xs flex gap-2 items-center justify-center w-full ">
+                    <div className="w-4">
+                        <LettaAgentIcon/>
+                    </div>
+                    Thinking...
                 </div>
             )}
             <form className="flex items-center border rounded-md px-1.5 py-2 gap-2" onSubmit={handleSubmit}>
@@ -85,55 +87,58 @@ function AgentMessages(props: AgentMessagesProps) {
 
 
 interface AgentContentProps {
-    agent: AgentState | null;
+    agentId: string;
 }
 
-export function AgentContent(props: AgentContentProps) {
-    const {agent} = props;
+export function AgentChat(props: AgentContentProps) {
+    const {agentId} = props;
 
-    const {isLoading} = useLettaAgentsList();
 
-    const {data: initialMessages} = useLettaQuery((client) => client.agents.messages.list(agent?.id || '', {
+    const {data: initialMessages, isPending, isError } = useLettaQuery((client) => client.agents.messages.list(agentId || '', {
         limit: 1000,
     }), {
-        queryKey: ['messages', agent?.id],
-        enabled: !!agent?.id,
+        retry: true,
+        queryKey: ['messages', agentId],
+        enabled: !!agentId,
     });
 
-
-    if (!agent?.id) {
+    if (isError) {
         return (
-            <div className="w-full h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-                <div className="bg-gray-200 dark:bg-gray-800 max-w-[400px] rounded p-5 gap-2 flex flex-col">
-                    <div className="w-25 flex">
-                        <SleepingAgentIcon/>
-                        <SleepingAgentIcon/>
-                        <SleepingAgentIcon/>
-                    </div>
-                    <div className="font-bold">
-                        {isLoading ? 'Loading Chat Environment...' : 'Please select an agent from the sidebar to start chatting'}
-                    </div>
+            <div className="flex items-center justify-center w-full h-full">
+                <div className="w-12 animate-pulse">
+                    <LettaAgentIcon/>
+                </div>
+                <div className="text-sm text-red-500">
+                    Failed to load messages. Please try again later.
+                </div>
+            </div>
+        )
+    }
+
+    if (isPending) {
+        return (
+            <div className="flex items-center justify-center w-full h-full">
+                <div className="w-12 animate-pulse">
+                    <LettaAgentIcon/>
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="flex flex-col w-full h-full">
-            <header className="min-h-[64px] border-b">
-                <div className="flex px-5 h-full justify-center flex-col">
-                    <div className="font-bold line-clamp-1">
-                        {agent.name}
-                    </div>
-                    <div className="text-sm  line-clamp-1">
-                        {agent.id}
-                    </div>
+        <div className="flex flex-col w-full  h-full">
+            <div className="flex items-center gap-2 justify-start px-5 w-full h-12 bg-gray-100 dark:bg-gray-900">
+                <div className="w-4">
+                    <LettaAgentIcon  />
                 </div>
-            </header>
+                <span className="font-semibold text-sm">
+                    Chatting with your personal agent
+                </span>
+            </div>
             {!!initialMessages &&
                 <AgentMessages
                     initialMessages={initialMessages}
-                    agentId={agent.id}/>}
+                    agentId={agentId}/>}
         </div>
     )
 }

@@ -1,5 +1,5 @@
 {
-  "name": "next-js-personal-agent",
+  "name": "next-js-customer-support-bot",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,15 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ai-sdk/react": "^1.2.9",
     "@letta-ai/letta-nextjs": "^0.0.13",
     "@letta-ai/letta-react": "^0.2.2",
     "@letta-ai/vercel-ai-sdk-provider": "^0.0.8",
     "@tanstack/react-query": "^5.74.3",
-    "@types/humps": "^2.0.6",
-    "ai": "^4.3.6",
+    "ai": "^4.3.8",
+    "bcrypt": "^5.1.1",
     "classnames": "^2.5.1",
-    "humps": "^2.0.1",
     "next": "15.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

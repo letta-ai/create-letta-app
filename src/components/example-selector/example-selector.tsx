@@ -1,16 +1,24 @@
 import {Box, render, Text, useInput} from 'ink';
 import React, {useMemo, useState} from 'react';
 
-import {LETTA_LOGO, LETTA_TEXT} from "../logos/logos.js";
+const BASIC_AGENTS_APP: ExampleApp = {
+    description: "A simple Next.JS powered web app that allows you to chat to all the agents in your Letta server, there is no authentication.",
+    id: 'next-js-basic-agents-chat',
+    label: "Basic agents chatroom",
+    postInstallCommands: ['npm install'],
+    preview: 'https://github.com/letta-ai/create-letta-app/tree/main/example-apps/next-js-basic-agents-chat',
+    toolsUsed: ['next.js', 'ai-sdk', 'react', 'tailwind'],
+};
 
-interface ExampleApp {
-    description: string;
-    id: string;
-    label: string;
-    postInstallCommands?: string[];
-    preview: string,
-    toolsUsed: string[];
+
+import {ExampleApp} from "../../types.js";
+import {LETTA_LOGO, LETTA_TEXT} from "../logos/logos.js";
+import {CUSTOMER_SERVICE_WIDGET} from "./examples/customer-service-widget.js";
+
+export interface AdditionalOperationsResponse {
+    env?: Record<string, string>
 }
+
 
 interface SupportedFramework {
     demoApps: ExampleApp[];
@@ -20,14 +28,8 @@ interface SupportedFramework {
 const supportedFrameworks: SupportedFramework[] = [
     {
         demoApps: [
-            {
-                description: "A simple Next.JS powered web app that allows you to chat to all the agents in your Letta server, there is no authentication.",
-                id: 'next-js-personal-agent',
-                label: "Personal agent chat",
-                postInstallCommands: ['npm install'],
-                preview: 'https://github.com/letta-ai/create-letta-app/tree/main/example-apps/next-js-personal-agent',
-                toolsUsed: ['next.js', 'ai-sdk', 'react', 'tailwind'],
-            },
+            BASIC_AGENTS_APP,
+            CUSTOMER_SERVICE_WIDGET,
             // {
             //     description: "A Next.js powered web agent-chat app that supports multiple users. Using SQLLite as a external database and the identities api, this app allows users to sign up with a username and password and talk to their own agents",
             //     id: 'next-js-multi-agent',
