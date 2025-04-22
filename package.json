@@ -46,7 +46,7 @@
   ],
   "homepage": "https://github.com/letta-ai/create-letta-app",
   "keywords": [
-    "oclif",
+    "oclif"
   ],
   "license": "MIT",
   "main": "dist/index.js",
