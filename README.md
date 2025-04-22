@@ -1,3 +1,5 @@
+![NPM Version](https://img.shields.io/npm/v/create-letta-app)
+
 ![Picture of the App](assets/image.png)
 # Create Letta App
 `create-letta-app` allows you to create applications that use Letta. It provides a simple and easy way to get started with Letta and build applications that leverage its capabilities.
