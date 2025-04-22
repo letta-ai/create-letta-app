@@ -1,7 +1,7 @@
 {
   "name": "create-letta-app",
   "description": "A new CLI generated with oclif",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "Letta",
   "bin": {
     "create-letta-app": "./bin/run.js"
@@ -46,7 +46,7 @@
   ],
   "homepage": "https://github.com/letta-ai/create-letta-app",
   "keywords": [
-    "oclif"
+    "oclif",
   ],
   "license": "MIT",
   "main": "dist/index.js",
