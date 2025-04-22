@@ -1,4 +1,4 @@
-![NPM Version](https://img.shields.io/npm/v/create-letta-app)
+[![NPM Version](https://img.shields.io/npm/v/create-letta-app)](https://www.npmjs.com/package/create-letta-app)
 
 ![Picture of the App](assets/image.png)
 # Create Letta App

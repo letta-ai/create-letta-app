@@ -1,7 +1,7 @@
 {
   "name": "create-letta-app",
-  "description": "A new CLI generated with oclif",
-  "version": "0.0.9",
+  "description": "Automagically discover and generate sample projects using Letta",
+  "version": "0.0.10",
   "author": "Letta",
   "bin": {
     "create-letta-app": "./bin/run.js"
