@@ -83,6 +83,14 @@ export async function POST(req: NextRequest) {
         });
     }
 
+    if (!LETTA_TEMPLATE_NAME) {
+        throw new Error('LETTA_TEMPLATE_NAME is not defined');
+    }
+
+    if (!LETTA_PROJECT_SLUG) {
+        throw new Error('LETTA_PROJECT_SLUG is not defined');
+    }
+
     const response = await lettaServerClient.client.templates.createAgents(LETTA_PROJECT_SLUG, LETTA_TEMPLATE_NAME, {
         memoryVariables: {
             name: identity.name || 'Unnamed',
