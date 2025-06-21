@@ -10,7 +10,7 @@ interface Response {
 
 export  async function projectSelector(apiKey: string): Promise<Response> {
     const client = getLettaClient(apiKey);
-    const debouncedListProjects = debounceAsyncFn((args: { name?: string }) => client.projects.listprojects({
+    const debouncedListProjects = debounceAsyncFn((args: { name?: string }) => client.projects.list({
         ...args,
         limit: 5,
     }), 500);

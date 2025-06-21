@@ -9,7 +9,7 @@
   "bugs": "https://github.com/letta-ai/create-letta-app/issues",
   "dependencies": {
     "@inquirer/prompts": "^7.4.1",
-    "@letta-ai/letta-client": "^0.1.93",
+    "@letta-ai/letta-client": "^0.1.132",
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
     "@oclif/plugin-plugins": "^5",
