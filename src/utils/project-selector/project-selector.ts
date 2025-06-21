@@ -12,7 +12,7 @@ export  async function projectSelector(apiKey: string): Promise<Response> {
     const client = getLettaClient(apiKey);
     const debouncedListProjects = debounceAsyncFn((args: { name?: string }) => client.projects.list({
         ...args,
-        limit: 5,
+        limit: '5',
     }), 500);
 
     const response = await autocomplete({
