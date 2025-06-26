@@ -6,11 +6,11 @@ import {getLettaClient} from "../get-letta-client/get-letta-client.js";
 
 export async function templateSelector(projectId: string, apiKey: string): Promise<string> {
     const client = getLettaClient(apiKey);
-    const debouncedListTemplates = debounceAsyncFn((args: { name?: string }) => client.templates.listtemplates(
+    const debouncedListTemplates = debounceAsyncFn((args: { name?: string }) => client.templates.list(
         {
             name: typeof args.name === 'string' ? args.name : undefined,
             projectId,
-            limit: 5,
+            limit: '5',
         }
     ), 500);
 
