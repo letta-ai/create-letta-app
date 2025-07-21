@@ -1,0 +1,26 @@
+{
+  "nextjs": [
+    {
+      "id": "next-js-chatbot-template",
+      "label": "Next.js Chatbot Template",
+      "description": "A simple Next.js application that integrates with Letta AI to create a chat app.",
+      "toolsUsed": ["letta sdk", "next.js", "react", "typescript", "shadcn", "react markdown"],
+      "preview": "git@github.com:letta-ai/letta-chatbot-example.git"
+    },
+    {
+      "description": "A simple Next.JS powered web app that allows you to chat to all the agents in your Letta server, there is no authentication.",
+      "id": "next-js-basic-agents-chat",
+      "label": "Basic agents chatroom",
+      "postInstallCommands": [
+        "npm install"
+      ],
+      "preview": "https://github.com/letta-ai/create-letta-app/tree/main/example-apps/next-js-basic-agents-chat",
+      "toolsUsed": [
+        "next.js",
+        "ai-sdk",
+        "react",
+        "tailwind"
+      ]
+    }
+  ]
+}

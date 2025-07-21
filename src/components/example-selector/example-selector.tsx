@@ -1,6 +1,11 @@
 import {Box, render, Text, useInput} from 'ink';
 import React, {useMemo, useState} from 'react';
 
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+
 const BASIC_AGENTS_APP: ExampleApp = {
     description: "A simple Next.JS powered web app that allows you to chat to all the agents in your Letta server, there is no authentication.",
     id: 'next-js-basic-agents-chat',
@@ -19,74 +24,22 @@ export interface AdditionalOperationsResponse {
     env?: Record<string, string>
 }
 
-
-interface SupportedFramework {
-    demoApps: ExampleApp[];
-    label: string;
+interface DemosInterface {
+    [key: string]: {
+        apps: ExampleApp[];
+        label: string;
+    }
 }
 
-const supportedFrameworks: SupportedFramework[] = [
-    {
-        demoApps: [
-            BASIC_AGENTS_APP,
-            CUSTOMER_SERVICE_WIDGET,
-            // {
-            //     description: "A Next.js powered web agent-chat app that supports multiple users. Using SQLLite as a external database and the identities api, this app allows users to sign up with a username and password and talk to their own agents",
-            //     id: 'next-js-multi-agent',
-            //     label: "Multi-user agent chat",
-            //     preview: 'https://google.com',
-            //     toolsUsed: ['next.js',  'ai-sdk', 'sqlite', 'react', 'tailwind', 'shadcn'],
-            // },
-            // {
-            //     description: "A Next.js powered web agent-chat app that supports multiple users. Authentication is handled by Auth0 and the app uses MongoDB as a external database. This app allows users to sign up with social providers and talk to their own agents",
-            //     id: 'remote-db-next-js-multi-agent',
-            //     label: "OAuth multi-user chat",
-            //     preview: 'https://google.com',
-            //     toolsUsed: ['auth0',  'ai-sdk', 'next.js', 'mongodb', 'react', 'tailwind', 'shadcn'],
-            // },
-        ],
-        label: 'Next.js'
-    },
-    // {
-    //     demoApps: [
-    //         {
-    //             description: "A simple Nuxt powered web app that allows you to chat to all the agents in your Letta server, there is no authentication.",
-    //             id: 'single-agent-chat',
-    //             label: "Personal agent chat",
-    //             preview: 'https://google.com',
-    //             toolsUsed: ['ai-sdk', 'nuxt', 'vuejs', 'tailwind'],
-    //         }
-    //     ],
-    //     label: 'Nuxt'
-    // },
-    // {
-    //     demoApps: [
-    //         {
-    //             description: "A React Native powered app that lets you talk to all the agents in your Letta server.",
-    //             id: 'expo-single-agent',
-    //             label: "Agent mobile app",
-    //             preview: 'https://google.com',
-    //             toolsUsed: ['expo',  'ai-sdk', 'react-native', 'tailwind'],
-    //         }
-    //     ],
-    //     label: 'React Native'
-    // },
-    // {
-    //     demoApps: [
-    //         {
-    //             description: "A flask powered web app with a react frontend that allows you to chat to all the agents in your Letta server, there is no authentication.",
-    //             id: 'flask-react-single-agent',
-    //             label: "Personal agent chat",
-    //             preview: 'https://google.com',
-    //             toolsUsed: ['react', 'flask', 'tailwind'],
-    //         }
-    //     ],
-    //     label: 'Flask+React'
-    // }
-]
+const demos: DemosInterface = {
+    'nextjs': {
+        apps: [],
+        label: 'Next.js',
+    }
+}
 
 interface SelectedAppPayload extends ExampleApp {
-    framework: string;
+    framework?: string
 }
 
 function SelectedExample(props: SelectedAppPayload) {
@@ -133,17 +86,30 @@ function ExampleView(props: ExampleViewProps) {
 
     const exampleApps = useMemo(() => {
         const apps = [] as SelectedAppPayload[];
-        for (const framework of supportedFrameworks) {
-            for (const app of framework.demoApps) {
+
+        const __dirname = dirname(fileURLToPath(import.meta.url));
+        const raw = readFileSync(join(__dirname, 'example-apps.json'), 'utf8');
+        const config = JSON.parse(raw)
+
+        for (const [frameworkKey, appsArray] of Object.entries(config)) {
+            // @ts-ignore
+            demos[frameworkKey].apps.push(...appsArray);
+            // @ts-ignore
+            for (const app of appsArray) {
                 apps.push({
                     ...app,
-                    framework: framework.label,
+                    framework: frameworkKey,
                 });
             }
         }
 
+        demos.nextjs.apps.push(CUSTOMER_SERVICE_WIDGET);
+        apps.push({...CUSTOMER_SERVICE_WIDGET, framework: 'nextjs'})
+
         return apps;
-    }, [supportedFrameworks]);
+    }, [demos]);
+
+
 
     useInput((_, key) => {
         if (key.upArrow) {
@@ -160,16 +126,21 @@ function ExampleView(props: ExampleViewProps) {
 
     return (
         <Box borderStyle="single" display="flex" flexDirection="row">
-
             <Box borderBottom={false} borderLeft={false} borderStyle="single" borderTop={false} display="flex"
                  flexDirection="column" gap={1} minWidth={30} paddingX={1} width={30}>
                 <Box display="flex" flexDirection="column">
-                    {supportedFrameworks.map((framework, index) => (
-                        <Box display="flex" flexDirection="column" key={index} marginBottom={1}>
+                    {Object.entries(demos).map(([frameworkKey, framework]) => (
+                        <Box
+                            display="flex"
+                            flexDirection="column"
+                            key={frameworkKey}
+                            marginBottom={1}
+                        >
                             <Text color="blueBright">{framework.label}</Text>
-                            {framework.demoApps.map((app) => (
+                            {framework.apps.map(app => (
                                 <Box key={app.id} paddingLeft={1}>
-                                    <Text backgroundColor={selectedApp.id === app.id ? 'blue' : ''}
+                                    <Text
+                                        backgroundColor={selectedApp.id === app.id ? 'blue' : ''}
                                     >
                                         {app.label}
                                     </Text>
@@ -178,12 +149,10 @@ function ExampleView(props: ExampleViewProps) {
                         </Box>
                     ))}
                 </Box>
-
             </Box>
             <Box flexGrow={1} padding={2}>
                 <SelectedExample {...selectedApp}/>
             </Box>
-
         </Box>
     )
 }
