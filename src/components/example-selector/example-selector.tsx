@@ -1,24 +1,9 @@
 import {Box, render, Text, useInput} from 'ink';
 import React, {useMemo, useState} from 'react';
 
-import { readFileSync } from 'node:fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-
-const BASIC_AGENTS_APP: ExampleApp = {
-    description: "A simple Next.JS powered web app that allows you to chat to all the agents in your Letta server, there is no authentication.",
-    id: 'next-js-basic-agents-chat',
-    label: "Basic agents chatroom",
-    postInstallCommands: ['npm install'],
-    preview: 'https://github.com/letta-ai/create-letta-app/tree/main/example-apps/next-js-basic-agents-chat',
-    toolsUsed: ['next.js', 'ai-sdk', 'react', 'tailwind'],
-};
-
-
 import {ExampleApp} from "../../types.js";
 import {LETTA_LOGO, LETTA_TEXT} from "../logos/logos.js";
-import {CUSTOMER_SERVICE_WIDGET} from "./examples/customer-service-widget.js";
+import {APP_LIST} from "./examples/list.js";
 
 export interface AdditionalOperationsResponse {
     env?: Record<string, string>
@@ -87,24 +72,18 @@ function ExampleView(props: ExampleViewProps) {
     const exampleApps = useMemo(() => {
         const apps = [] as SelectedAppPayload[];
 
-        const __dirname = dirname(fileURLToPath(import.meta.url));
-        const raw = readFileSync(join(__dirname, 'example-apps.json'), 'utf8');
-        const config = JSON.parse(raw)
-
-        for (const [frameworkKey, appsArray] of Object.entries(config)) {
+        for (const [framework, demoApps] of Object.entries(APP_LIST)) {
             // @ts-ignore
-            demos[frameworkKey].apps.push(...appsArray);
+            demos[framework].apps.push(...demoApps);
             // @ts-ignore
-            for (const app of appsArray) {
-                apps.push({
+            for (const app of demoApps) {
+                const appWithFramework: SelectedAppPayload = {
                     ...app,
-                    framework: frameworkKey,
-                });
+                    framework,
+                };
+                apps.push(appWithFramework);
             }
         }
-
-        demos.nextjs.apps.push(CUSTOMER_SERVICE_WIDGET);
-        apps.push({...CUSTOMER_SERVICE_WIDGET, framework: 'nextjs'})
 
         return apps;
     }, [demos]);
@@ -190,7 +169,7 @@ export function Example(props: ExampleProps) {
             </Box>
             <Box borderStyle="single" display="flex" flexDirection="column" paddingX={1}>
                 <Text bold>npx create-letta-app generate</Text>
-                <Text>Pick below from the following example apps to be generated in your current
+                <Text>Select from the following example apps to be generated in your current
                     directory: {process.cwd()}/[sample-app-name]</Text>
                 <Box borderBottom={false} borderLeft={false} borderRight={false} borderStyle="single" borderTop
                      display="flex" flexDirection="column">
