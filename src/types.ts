@@ -2,8 +2,8 @@ import {AdditionalOperationsResponse} from "./components/example-selector/exampl
 
 export interface GenerateCommandConfig {
     apiKey?: string;
-    projectSlug?: string;
     projectId?: string;
+    projectSlug?: string;
     serverUrl?: string;
     shouldUseLettaCloud?: boolean;
 }

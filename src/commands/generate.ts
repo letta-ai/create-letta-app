@@ -2,14 +2,14 @@ import {confirm, input, password} from '@inquirer/prompts'
 import {Command} from '@oclif/core'
 import {execSync} from "node:child_process";
 import * as fs from 'node:fs'
+// eslint-disable-next-line unicorn/import-style
 import * as path from "node:path";
-import {fileURLToPath} from 'node:url';
 
 import {getSelectedExample} from "../components/example-selector/example-selector.js";
 import {GenerateCommandConfig} from "../types.js";
 import {canConnectToCloud} from "../utils/can-connect-to-cloud/can-connect-to-cloud.js";
-import {projectSelector} from "../utils/project-selector/project-selector.js";
 import {getIsDevEnv} from "../utils/get-is-dev-env/get-is-dev-env.js";
+import {projectSelector} from "../utils/project-selector/project-selector.js";
 
 
 export default class Generate extends Command {
@@ -18,9 +18,8 @@ export default class Generate extends Command {
     static description = 'Generate a new Letta project'
     static examples = [
         `<%= config.bin %> <%= command.id %>
-Generate a new Letta project (./src/commands/start.ts)
-`,
-    ]
+        Generate a new Letta project (./src/commands/start.ts)
+        `,]
     static flags = {}
 
     async run(): Promise<void> {
@@ -70,11 +69,7 @@ Generate a new Letta project (./src/commands/start.ts)
             config.projectId = project.id;
         }
 
-        const workingDirectory = getIsDevEnv() ? path.join(process.cwd(), 'tmp', selectedApp.id) : path.join(process.cwd(), selectedApp.id);
-
-        const dirName = fileURLToPath(import.meta.url);
-
-        const templatePath = path.join(dirName, '..', '..', 'example-apps', selectedApp.id);
+        const workingDirectory = getIsDevEnv() ? path.join(process.cwd(), 'tmp') : path.join(process.cwd());
 
         const additionalEnv = [];
 
@@ -89,30 +84,34 @@ Generate a new Letta project (./src/commands/start.ts)
         }
 
         this.log(`Generating project in ${workingDirectory}...`);
-        // copy the template files to the current working directory
-        fs.cpSync(templatePath, workingDirectory, {
-            recursive: true,
-        })
+
+        // fetch the latest version of the selected app
+        const cmds = [
+            `mkdir -p ${workingDirectory ?? ''} && ${workingDirectory ? `cd ${workingDirectory}`: ''}`,
+            `git clone --depth=1  ${selectedApp.preview}`
+        ];
+
+        const cmd = cmds.join(' && ');
+        const output = execSync(cmd);
+        this.log(output.toString());
 
         // create .env file in the current working directory
-        const envFilePath = path.join(workingDirectory, '.env');
-
+        const envFilePath = path.join(workingDirectory, selectedApp.id, '.env');
         const envContent = `
-LETTA_API_KEY=${config.apiKey}
-LETTA_BASE_URL=${config.shouldUseLettaCloud ? 'https://app.letta.com' : config.serverUrl}
-${additionalEnv.join('\n')}
-`;
-
+            LETTA_API_KEY=${config.apiKey}
+            LETTA_BASE_URL=${config.shouldUseLettaCloud ? 'https://app.letta.com' : config.serverUrl}
+            ${additionalEnv.join('\n')}
+            `;
         fs.writeFileSync(envFilePath, envContent);
 
+        // post install
         const postInstallCommands = selectedApp.postInstallCommands || [];
-
         for (const command of postInstallCommands) {
             this.log(`Running post setup command: ${command}`);
             execSync(command, {cwd: workingDirectory, stdio: 'inherit'});
         }
 
-        const successMessage = `Project generated successfully, you can visit ${workingDirectory} to start working on your project.\n\n=============================\nRun the following commands to get started:\ncd ${selectedApp.id}\nnpm run dev`;
+        const successMessage = `Project generated successfully, you can visit ${workingDirectory} to start working on your project.\n\n=============================\\n`;
 
         this.log(successMessage);
         this.exit(0);

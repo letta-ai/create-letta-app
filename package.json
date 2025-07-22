@@ -1,7 +1,7 @@
 {
   "name": "create-letta-app",
   "description": "Automagically discover and generate sample projects using Letta",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "author": "Letta",
   "bin": {
     "create-letta-app": "./bin/run.js"
@@ -33,7 +33,7 @@
     "mocha": "^10",
     "oclif": "^4",
     "shx": "^0.3.3",
-    "ts-node": "^10",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   },
   "engines": {
@@ -67,14 +67,15 @@
   },
   "repository": "letta-ai/create-letta-app",
   "scripts": {
-    "dev": "shx rm -rf dist && tsc && cp -r ./example-apps ./dist && NODE_ENV=create-letta-dev create-letta-app",
-    "build": "shx rm -rf dist && tsc -b && cp -r ./example-apps ./dist",
+    "dev": "shx rm -rf dist && tsc && NODE_ENV=create-letta-dev create-letta-app",
+    "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "npm run lint",
     "prepack": "oclif manifest && oclif readme",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif readme && git add README.md"
+    "version": "oclif readme && git add README.md",
+    "start": "create-letta-app"
   },
   "types": "dist/index.d.ts"
 }
