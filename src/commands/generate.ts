@@ -111,7 +111,7 @@ export default class Generate extends Command {
             execSync(command, {cwd: workingDirectory, stdio: 'inherit'});
         }
 
-        const successMessage = `Project generated successfully, you can visit ${workingDirectory} to start working on your project.\n\n=============================\\nRun the following commands to get started:\\ncd ${selectedApp.id}\\nnpm install\\nnpm run dev`;
+        const successMessage = `Project generated successfully, you can visit ${workingDirectory} to start working on your project.\n\n=============================\\n`;
 
         this.log(successMessage);
         this.exit(0);
