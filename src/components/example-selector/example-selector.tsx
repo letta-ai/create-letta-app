@@ -73,9 +73,7 @@ function ExampleView(props: ExampleViewProps) {
         const apps = [] as SelectedAppPayload[];
 
         for (const [framework, demoApps] of Object.entries(APP_LIST)) {
-            // @ts-ignore
             demos[framework].apps.push(...demoApps);
-            // @ts-ignore
             for (const app of demoApps) {
                 const appWithFramework: SelectedAppPayload = {
                     ...app,

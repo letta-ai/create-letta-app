@@ -16,6 +16,7 @@ interface AppListInterface {
     [key: string]: DemoAppInterface[];
 }
 
+// ADD YOUR EXAMPLE APPS HERE
 export const APP_LIST: AppListInterface = {
     'nextjs': [
         CHATBOT_TEMPLATE,
