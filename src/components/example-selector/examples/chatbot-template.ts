@@ -16,7 +16,6 @@ export const CHATBOT_TEMPLATE: ExampleApp = {
     description: "A simple Next.js application that integrates with Letta AI to create a chat app.",
     id: "letta-chatbot-example", // MUST BE SAME NAME AS THE REPO
     label: "Next.js Chatbot Template",
-    postInstallCommands: ["npm install"],
     preview: "https://github.com/letta-ai/letta-chatbot-example.git",
     toolsUsed: ["letta sdk", "next.js", "react", "typescript", "shadcn", "react markdown"]
 }

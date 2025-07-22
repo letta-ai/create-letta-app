@@ -24,7 +24,7 @@ const demos: DemosInterface = {
 }
 
 interface SelectedAppPayload extends ExampleApp {
-    framework?: string
+    framework: string
 }
 
 function SelectedExample(props: SelectedAppPayload) {
